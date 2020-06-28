@@ -1,64 +1,46 @@
-class Personagem {
-  constructor(imagem) {
-    this.imagem = imagem;
-    
-    this.frameAtual = 0;
-    
-    this.resolucao = {
-      x: 110,
-      y: 135 
-    }
+class Personagem extends Animacao{
+  constructor(imagem, posicao, resolucao, spritesConfigs) {
+    super(imagem, posicao, resolucao, spritesConfigs);
 
-    this.posicaoInical = {
-      x: 100,
-      y: height - (this.resolucao.y + 10)
-    }
+    this.yInicial = this.posicao.y;
+    this.posicao.y = this.yInicial;
 
-    this.sprites = {
-      width: 220,
-      height: 270,
-      totalLinhas: 4,
-      totalColunas: 4
-    }
-
-    this.matriz = criaMatriz(this.sprites.width, this.sprites.height, this.sprites.totalLinhas, this.sprites.totalColunas);
+    this.velocidadeDoPulo = 0;
+    this.velocidadeMaximaDoPulo = -30;
+    this.pulos = 0;
+    this.gravidade = 3;
   }
 
-  atualizaSprite() {
-    this.frameAtual++;
-
-    if (this.frameAtual >= this.matriz.length - 1) {
-      this.frameAtual = 0;
+  pula(somDoPulo) {
+    if (this.posicao.y === this.yInicial) {
+      this.pulos = 0;
+    }
+    
+    if (this.pulos < 2) {
+      this.velocidadeDoPulo = this.velocidadeMaximaDoPulo;
+      somDoPulo.play();
+      this.pulos++;
     }
   }
 
-  anima() {
-    image(
-      this.imagem, // Define a imagem/mapa de sprites
-      this.posicaoInical.x, this.posicaoInical.y, // Define a posição do sprite na tela
-      this.resolucao.x, this.resolucao.y, // Define a resolução da imagem do sprite
-      this.matriz[this.frameAtual][0], this.matriz[this.frameAtual][1], // Define o sprite atual
-      this.sprites.width, this.sprites.height // Define o tamanho real do sprite
+  aplicaGravidade() {
+    this.posicao.y += this.velocidadeDoPulo;
+
+    this.velocidadeDoPulo += this.gravidade;
+
+    if (this.posicao.y > this.yInicial) {
+      this.posicao.y = this.yInicial;
+    }
+  }
+
+  estaColidindo(inimigo) {
+    const precisao = .7;
+
+    return collideRectRect(
+      this.posicao.x, this.posicao.y, 
+      this.resolucao.width * precisao, this.resolucao.height * precisao,
+      inimigo.posicao.x, inimigo.posicao.y,
+      inimigo.resolucao.width * precisao, inimigo.resolucao.height * precisao,
     );
-
-    this.atualizaSprite();
   }
-}
-
-function criaMatriz(width, height, linhas, colunas) {
-  let matriz = [];
-
-  let y = 0;
-  for (let l = 0; l < linhas; l++) {
-    let x = 0;
-    
-    for (let c = 0; c < colunas; c++) {
-      matriz.push([x, y]);
-      x += width;
-    }
-
-    y += height;
-  }
-
-  return matriz;
 }
