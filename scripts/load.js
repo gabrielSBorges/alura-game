@@ -1,5 +1,7 @@
 // Carrega os arquivos do jogo (imagens, músicas etc)
 function preload() {
+  fita = loadJSON('fitas/fita1.json');
+  
   imagemTelaIncial = loadImage('assets/imagens/cenas/telaInicial/telaInicial.png');
   fonteTelaInicial = loadFont('assets/imagens/cenas/telaInicial/fonteTelaInicial.otf');
 

@@ -30,6 +30,9 @@ let vida;
 
 let cenas;
 
+let mapa = [];
+let fita;
+
 let botaoGerenciador;
 
 // Outros
