@@ -36,5 +36,5 @@ let fita;
 let botaoGerenciador;
 
 // Outros
-let cenaAtual = 'jogo';
+let cenaAtual = 'telaInicial';
 let fonteTelaInicial;
